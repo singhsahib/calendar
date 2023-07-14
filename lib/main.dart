@@ -1,4 +1,4 @@
-import 'package:calendar/screens/home_screen.dart';
+import './screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import '../constants/themes.dart';
 
@@ -24,6 +24,7 @@ class _AppState extends State<App> {
       themeMode: ThemeMode.system,
       theme: ThemeClass.dark_theme,
       darkTheme: ThemeClass.dark_theme,
+      home: MainHomeScreen(),
       routes: {
         MainHomeScreen.route_name: (context) => const MainHomeScreen(),
       },
