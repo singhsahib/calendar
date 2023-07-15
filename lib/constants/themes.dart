@@ -3,7 +3,7 @@ import './colors.dart';
 
 class ThemeClass {
   static ThemeData light_theme = ThemeData(
-    scaffoldBackgroundColor: CustomColors.gradient_color2,
+    scaffoldBackgroundColor: CustomColors.primary_light,
     brightness: Brightness.light,
     fontFamily: 'Exo 2',
     primaryColor: CustomColors.primary_light,

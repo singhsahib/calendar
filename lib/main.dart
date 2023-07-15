@@ -22,7 +22,7 @@ class _AppState extends State<App> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.system,
-      theme: ThemeClass.dark_theme,
+      theme: ThemeClass.light_theme,
       darkTheme: ThemeClass.dark_theme,
       home: MainHomeScreen(),
       routes: {
