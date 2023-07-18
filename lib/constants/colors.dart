@@ -6,7 +6,7 @@ class CustomColors {
   pratham change the colors accordingly. These are also being used in themes 
   file so that the app changes themes based on the device settings.
   */
-  static const Color gradient_color1 = Color(0xFFA0A0FF);
+  // static const Color gradient_color1 = Color(0xFFA0A0FF);
   static const Color gradient_color2 = Color(0xFF6D6AFA);
 
   static const Color primary_dark = Color(0xFF1F2730);
