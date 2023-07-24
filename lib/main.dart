@@ -1,12 +1,14 @@
 import 'package:calendar/screens/day_screen.dart';
 import 'package:calendar/screens/year_screen.dart';
 import 'package:calendar_view/calendar_view.dart';
+import 'package:hive_flutter/adapters.dart';
 
 import 'screens/month_screen.dart';
 import 'package:flutter/material.dart';
 import '../constants/themes.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
   runApp(App());
 }
 

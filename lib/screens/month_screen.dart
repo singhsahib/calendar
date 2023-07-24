@@ -1,5 +1,6 @@
 import 'package:calendar/constants/colors.dart';
 import 'package:calendar/constants/size.dart';
+import 'package:calendar/functions/common.dart';
 import 'package:calendar/screens/day_screen.dart';
 import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,7 @@ class _MonthScreen extends StatefulWidget {
 }
 
 class _MonthScreenState extends State<_MonthScreen> {
+  EventController monthController = EventController();
   final List<String> weekDayList = ["M", "T", "W", "T", "F", "S", "S"];
 
   @override
@@ -43,10 +45,9 @@ class _MonthScreenState extends State<_MonthScreen> {
           height: actualHeight,
           child: MonthView(
               startDay: WeekDays.sunday,
-              // minMonth: DateTime(1990,),
-              // maxMonth: DateTime(2050),
-              // initialMonth: DateTime(2021),
-              // borderSize: 0,
+              minMonth: DateTime(1990),
+              maxMonth: DateTime(2050),
+              initialMonth: Common.getCurrentDate(),
               showBorder: false,
               headerBuilder: (DateTime date) {
                 return Container();
@@ -70,33 +71,47 @@ class _MonthScreenState extends State<_MonthScreen> {
                 );
               },
               cellBuilder: (date, events, isToday, isInMonth) {
-                // Return your widget to display as month cell.
-                return Container(
-                  width: CustomSize.getWidth(width, 50),
-                  // height: 150,
-                  decoration: BoxDecoration(
-                    color: isToday ? CustomColors.gradient_color2 : null,
-                    shape: BoxShape.circle,
+                // Return your widget to display every day of the month.
+                return TextButton(
+                  onPressed: () {
+                    // going to next screen when clicked on this day.
+                    Navigator.of(context).pushNamed(
+                      MainDayScreen.routeName,
+                    );
+                  },
+                  style: TextButton.styleFrom(
+                    backgroundColor:
+                        isToday ? CustomColors.gradient_color2 : null,
+                    primary: CustomColors.primary_light,
                   ),
-                  alignment: Alignment.center,
-                  child: isInMonth
-                      ? TextButton(
-                          onPressed: () {},
-                          child: Text(
+                  child: Container(
+                    // width: CustomSize.getWidth(width, 50),
+                    height: CustomSize.getHeight(
+                      height,
+                      80,
+                    ),
+                    alignment: Alignment.center,
+                    child: Column(
+                      children: [
+                        if (isInMonth)
+                          Text(
                             date.day.toString(),
                             style: TextStyle(
-                              fontSize: CustomSize.size(width, height, 18),
+                              fontSize: CustomSize.size(
+                                width,
+                                height,
+                                18,
+                              ),
                             ),
                           ),
-                        )
-                      : null,
+                      ],
+                    ),
+                  ),
                 );
               },
               // cellAspectRatio: 1 / 2,
               onPageChange: (date, pageIndex) => print("$date, $pageIndex"),
-              onCellTap: (events, date) {
-                Navigator.of(context).pushNamed(MainDayScreen.routeName);
-              },
+              onCellTap: (events, date) {},
               onEventTap: (event, date) => print(event),
               onDateLongPress: (date) => print(date)),
         ),

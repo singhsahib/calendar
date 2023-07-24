@@ -1,23 +1,28 @@
 import 'package:calendar/constants/names.dart';
 
 class Task {
-  List<String> actionList;
+  String taskTitle;
+  String taskDescription;
   bool checklist;
 
   Task({
-    required this.actionList,
-    this.checklist = true,
+    required this.taskTitle,
+    required this.taskDescription,
+    this.checklist = false,
   });
 
   toJson() => {
-        ACTION_LIST: this.actionList,
+        TASK_TITLE: this.taskTitle,
+        TASK_DESCRIPTION: this.taskDescription,
         CHECKLIST: this.checklist,
       };
 
   static Task fromJson(Map json) {
     return Task(
-      actionList: json.containsKey(ACTION_LIST) ? json[ACTION_LIST] : [],
-      checklist: json.containsKey(CHECKLIST) ? json[CHECKLIST] : true,
+      taskTitle: json.containsKey(TASK_TITLE) ? json[TASK_TITLE] : '',
+      taskDescription:
+          json.containsKey(TASK_DESCRIPTION) ? json[TASK_DESCRIPTION] : '',
+      checklist: json.containsKey(CHECKLIST) ? json[CHECKLIST] : false,
     );
   }
 }
