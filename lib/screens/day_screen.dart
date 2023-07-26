@@ -1,7 +1,9 @@
 import 'package:calendar/constants/colors.dart';
 import 'package:calendar/constants/size.dart';
 import 'package:calendar/functions/common.dart';
+import 'package:calendar/screens/event_form_screen.dart';
 import 'package:calendar_view/calendar_view.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class MainDayScreen extends StatelessWidget {
@@ -25,22 +27,57 @@ class _DayScreen extends StatefulWidget {
 class _DayScreenState extends State<_DayScreen> {
   EventController dayController = EventController();
 
-  void addEvent(DateTime date) {
-    print(date);
-    CalendarEventData event = CalendarEventData(
-      title: "Example",
-      date: date,
-      endDate: date,
-      startTime: date,
-      endTime: Common.getCurrentDate(
-        hour: date.hour + 1,
-        minute: date.minute,
-        second: date.second,
-      ),
-      description: "asdasdasd",
-    );
+  void addEvent(CalendarEventData eventData) {
+    // CalendarEventData event = CalendarEventData(
+    //   title: "Example",
+    //   date: date,
+    //   endDate: date,
+    //   startTime: date,
+    //   endTime: Common.getCurrentDate(
+    //     hour: date.hour + 1,
+    //     minute: date.minute,
+    //     second: date.second,
+    //   ),
+    //   description: "asdasdasd",
+    // );
 
-    dayController.add(event);
+    dayController.add(eventData);
+  }
+
+  void toOpenModal(DateTime date) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(30),
+        ),
+      ),
+      builder: (BuildContext context) {
+        final double width = MediaQuery.of(context).size.width;
+        // final double height = MediaQuery.of(context).size.height;
+        // final double topPadding = MediaQuery.of(context).viewPadding.top;
+        // final double actualHeight = height - topPadding;
+
+        return DraggableScrollableSheet(
+          expand: false,
+          initialChildSize: 0.9,
+          maxChildSize: 0.9,
+          minChildSize: 0.4,
+          snapSizes: [0.6],
+          snap: true,
+          builder: (BuildContext context, ScrollController scrollController) {
+            return SingleChildScrollView(
+              controller: scrollController,
+              child: EventFormScreen(
+                selectedTime: date,
+                onAddEvent: addEvent,
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 
   Future<void> getData() async {}
@@ -103,12 +140,25 @@ class _DayScreenState extends State<_DayScreen> {
             color: CustomColors.third_dark,
           ),
         ),
+        // verticalLineOffset: 0,
+        timeLineOffset: CustomSize.size(width, height, 10),
+        timeLineBuilder: (DateTime date) {
+          return Container(
+            alignment: Alignment.topCenter,
+            child: Text(
+              "${date.hour > 12 ? (date.hour - 12).toString() + " PM" : date.hour.toString() + " AM"}",
+              style: TextStyle(
+                fontSize: CustomSize.size(width, height, 14),
+              ),
+            ),
+          );
+        },
         showVerticalLine: false,
         showLiveTimeLineInAllDays: false,
         heightPerMinute: 1,
         eventArranger: SideEventArranger(),
         onEventTap: (events, date) => print(date),
-        onDateTap: addEvent,
+        onDateTap: toOpenModal,
         onDateLongPress: (date) => print(date),
         minuteSlotSize: MinuteSlotSize.minutes15,
       ),

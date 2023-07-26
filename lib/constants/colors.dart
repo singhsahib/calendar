@@ -17,9 +17,11 @@ class CustomColors {
 
   static const Color third_dark = Color(0xFF211F32);
 
-  static const Color light_blue = Color(0xFFF7F5FF);
   static const Color dark_grey = Color(0xFF8A8A8A);
   static const Color light_grey = Color(0xFFE6E6E6);
+
+  static const Color light_blue = Color(0xFFF7F5FF);
+  static const Color textbox = Color(0x1EE3F2FD);
   static const Color error = Color.fromARGB(255, 255, 0, 0);
   static const Color success = Color.fromARGB(255, 40, 254, 21);
 }
