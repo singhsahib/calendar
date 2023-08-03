@@ -1,6 +1,8 @@
 import 'package:calendar/constants/colors.dart';
 import 'package:calendar/constants/size.dart';
+import 'package:calendar/database/local_storage.dart';
 import 'package:calendar/functions/common.dart';
+import 'package:calendar/models/child/event_item.dart';
 import 'package:calendar/screens/event_form_screen.dart';
 import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/cupertino.dart';
@@ -27,20 +29,23 @@ class _DayScreen extends StatefulWidget {
 class _DayScreenState extends State<_DayScreen> {
   EventController dayController = EventController();
 
-  void addEvent(CalendarEventData eventData) {
-    // CalendarEventData event = CalendarEventData(
-    //   title: "Example",
-    //   date: date,
-    //   endDate: date,
-    //   startTime: date,
-    //   endTime: Common.getCurrentDate(
-    //     hour: date.hour + 1,
-    //     minute: date.minute,
-    //     second: date.second,
-    //   ),
-    //   description: "asdasdasd",
-    // );
+  Future<void> setData() async {
+    Map<String, EventItem> data = await LocalStorage.getAllEvent();
 
+    data.forEach((key, value) {
+      addEvent(value.toCalendarEventData());
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    setData().then((value) {}).catchError((err) {});
+  }
+
+  void addEvent(CalendarEventData eventData) {
     dayController.add(eventData);
   }
 

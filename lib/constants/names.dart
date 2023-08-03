@@ -6,6 +6,7 @@ const String EVENT_ID = "event_id",
     CREATION_DATE = 'creation_date',
     EVENT_START_DATE = 'event_start_date',
     EVENT_END_DATE = 'event_end_date',
+    COLOR = 'color',
     EVENT_DESCRIPTION = '';
 
 // For Task

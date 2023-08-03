@@ -1,5 +1,9 @@
 import 'package:calendar/constants/limit.dart';
 import 'package:calendar/constants/size.dart';
+import 'package:calendar/database/local_storage.dart';
+import 'package:calendar/functions/common.dart';
+import 'package:calendar/models/child/add_event.dart';
+import 'package:calendar/models/child/event_item.dart';
 import 'package:calendar/screens/event_color_screen.dart';
 import 'package:calendar/widgets/space.dart';
 import 'package:calendar_view/calendar_view.dart';
@@ -31,6 +35,8 @@ class _EventFormScreenState extends State<EventFormScreen> {
   TimeOfDay? _endTime;
   bool _entireDayEvent = false;
   Color _eventColor = CustomColors.gradient_color2;
+  DateTime? _startDateTime;
+  DateTime? _endDateTime;
   TextEditingController _startTimeController = TextEditingController(text: "");
   TextEditingController _endTimeController = TextEditingController(text: "");
 
@@ -45,14 +51,28 @@ class _EventFormScreenState extends State<EventFormScreen> {
       minute: widget.selectedTime.minute,
     );
 
-    print(st);
-    print(et);
-
     setState(() {
       _startTime = st;
       _endTime = et;
       _startTimeController.text = st.format(context);
       _endTimeController.text = et.format(context);
+    });
+
+    setState(() {
+      _startDateTime = widget.selectedTime;
+    });
+
+    DateTime end = Common.getCurrentDate(
+      day: widget.selectedTime.day,
+      hour: widget.selectedTime.hour + 1,
+      minute: widget.selectedTime.minute,
+      month: widget.selectedTime.month,
+      second: widget.selectedTime.second,
+      year: widget.selectedTime.year,
+    );
+
+    setState(() {
+      _endDateTime = end;
     });
   }
 
@@ -170,7 +190,8 @@ class _EventFormScreenState extends State<EventFormScreen> {
             : null,
         floatingLabelAlignment: FloatingLabelAlignment.start,
         filled: true,
-        labelText: hint_text,
+        // labelText: hint_text,
+        hintText: hint_text,
         labelStyle: TextStyle(
           color: enabled ? CustomColors.primary_light : CustomColors.dark_grey,
         ),
@@ -185,6 +206,24 @@ class _EventFormScreenState extends State<EventFormScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> saveEvent() async {
+    print(_startTimeController.text);
+    // print(Common.dateTimeDecode(_startTimeController.text));
+    AddEvent addEvent = AddEvent(
+      eventName: _titleController.text,
+      creationDate: Common.getCurrentDate(),
+      eventStartDate: _startDateTime!,
+      eventEndDate: _endDateTime!,
+      eventDescription: _titleDescriptionController.text,
+      color: _eventColor,
+      task: [],
+    );
+    EventItem eventAdded = await LocalStorage.addEvent(addEvent);
+
+    widget.onAddEvent(eventAdded.toCalendarEventData());
+    Navigator.of(context).pop();
   }
 
   @override
@@ -354,15 +393,16 @@ class _EventFormScreenState extends State<EventFormScreen> {
                 ],
               ),
               Space(spaceY: 10),
-              // Container(
-              //   height: height * 0.3,
-              //   color: CustomColors.error,
-              //   child: Text("This is where Tasks will be added"),
-              // ),
               SizedBox(
                 width: width,
                 child: ElevatedButton.icon(
-                  onPressed: () {},
+                  onPressed: () {
+                    saveEvent().then((value) {
+                      print("saved");
+                    }).catchError((err) {
+                      print(err.toString());
+                    });
+                  },
                   style: ElevatedButton.styleFrom(
                     primary: CustomColors.gradient_color2,
                   ),

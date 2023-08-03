@@ -18,9 +18,9 @@ class Event {
 
   Map toJson() => {
         EVENT_NAME: this.eventName,
-        CREATION_DATE: this.creationDate,
-        EVENT_START_DATE: this.eventStartDate,
-        EVENT_END_DATE: this.eventEndDate,
+        CREATION_DATE: Common.dateTimeEncode(this.creationDate),
+        EVENT_START_DATE: Common.dateTimeEncode(this.eventStartDate),
+        EVENT_END_DATE: Common.dateTimeEncode(this.eventEndDate),
         EVENT_DESCRIPTION: this.eventDescription,
       };
 
@@ -28,13 +28,13 @@ class Event {
     return Event(
       eventName: json.containsKey(EVENT_NAME) ? json[EVENT_NAME] : "",
       creationDate: json.containsKey(CREATION_DATE)
-          ? json[CREATION_DATE]
+          ? Common.dateTimeDecode(json[CREATION_DATE])
           : Common.getCurrentDate(),
       eventStartDate: json.containsKey(EVENT_START_DATE)
-          ? json[EVENT_START_DATE]
+          ? Common.dateTimeDecode(json[EVENT_START_DATE])
           : Common.getCurrentDate(),
       eventEndDate: json.containsKey(EVENT_END_DATE)
-          ? json[EVENT_END_DATE]
+          ? Common.dateTimeDecode(json[EVENT_END_DATE])
           : Common.getCurrentDate(),
       eventDescription:
           json.containsKey(EVENT_DESCRIPTION) ? json[EVENT_DESCRIPTION] : "",
